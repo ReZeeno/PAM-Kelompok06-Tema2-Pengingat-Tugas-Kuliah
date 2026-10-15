@@ -1,7 +1,5 @@
-package org.example.project
+package id.ac.itera.pengingattugas
 
-interface Platform {
-    val name: String
-}
+expect fun namaPlatform(): String
 
-expect fun getPlatform(): Platform
+fun sapaan(): String = "Pengingat Tugas Kuliah berjalan di ${namaPlatform()}"
