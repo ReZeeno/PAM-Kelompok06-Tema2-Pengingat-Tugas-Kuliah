@@ -27,7 +27,7 @@ Ketua kelompok: Yoga Aditomo
 ![SSDesktop.png](SSDesktop.png)
 
 ## Android
-![SSAndro.png](SSAndro.png)
+![ssandro.png](ssandro.png)
 
 ## Isi Aplikasi Saat Ini
 
