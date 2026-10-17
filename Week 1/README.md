@@ -24,10 +24,12 @@ Ketua kelompok: Yoga Aditomo
 ## Tangkapan Layar
 
 ### Dekstop
-![SSDesktop.png](SSDesktop.png)
+<img width="591" height="445" alt="SS Desktop" src="https://github.com/user-attachments/assets/07d1779b-3b73-4967-8e52-77f5f93246f3" />
+
 
 ## Android
-![ssandro.png](ssandro.png)
+<img width="712" height="1600" alt="SS Mobile" src="https://github.com/user-attachments/assets/1501b570-01ae-4e20-9bc7-ccc31e6d7226" />
+
 
 ## Isi Aplikasi Saat Ini
 
