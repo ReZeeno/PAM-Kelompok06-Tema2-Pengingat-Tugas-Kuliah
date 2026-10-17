@@ -24,11 +24,10 @@ Ketua kelompok: Yoga Aditomo
 ## Tangkapan Layar
 
 ### Android
-![SS Android.png](SS%20Android.png)
+![SSAndroid.png](SSAndroid.png)
 
 ### Dekstop
-![SS Desktop.png](SS%20Desktop.png)
-
+![SSDesktop.png](SSDesktop.png)
 ## Isi Aplikasi Saat Ini
 
 - Layar utama menampilkan judul "Pengingat Tugas Kuliah" dan "Tema 2".
