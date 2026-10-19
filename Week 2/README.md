@@ -26,7 +26,7 @@ Ketua kelompok: Yoga Aditomo
 
 | Android | Desktop |
 |---------|---------|
-| ![SSAndroid.png](SSAndroid.png) | <img width="1200" height="200" alt="SS Desktop" src="https://github.com/user-attachments/assets/6e11b34f-4933-4dca-9648-62861ac80460" />|
+| ![SSAndroid.png](SSAndroid.png) | <img width="500" height="350" alt="SS Desktop" src="https://github.com/user-attachments/assets/6e11b34f-4933-4dca-9648-62861ac80460" />|
 
 ## Isi Aplikasi Saat Ini
 
