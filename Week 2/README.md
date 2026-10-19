@@ -4,7 +4,7 @@
 
 Aplikasi Kotlin Multiplatform dengan Compose Multiplatform yang menargetkan Android dan Desktop (JVM).
 
-Proyek kelompok mata kuliah **IF25-22017 Pengembangan Aplikasi Mobile**, Program Studi Teknik Informatika, Fakultas Teknologi Industri, Institut Teknologi Sumatera (ITERA).
+Proyek kelompok mata kuliah **IF25-22017 Pengembangan Aplikasi Mobile**, Program Studi Teknik Informatika, Fakultas Teknologi Industri, Institut Teknologi Sumatera (ITERA).  
 Dosen pengampu: Muhammad Habib Algifari, S.Kom., M.T.I.
 
 ## Tema
@@ -13,7 +13,7 @@ Dosen pengampu: Muhammad Habib Algifari, S.Kom., M.T.I.
 
 ## Anggota Kelompok
 
-Ketua kelompok:Yoga Aditomo
+Ketua kelompok: Yoga Aditomo
 
 | No | Nama                         | NIM       |
 |----|------------------------------|-----------|
@@ -21,31 +21,85 @@ Ketua kelompok:Yoga Aditomo
 | 2  | Guntur Anggoro Rahardianto   | 124140105 |
 | 3  | Muhammad Radhitya Hammam     | 124140189 |
 
+
 ## Tangkapan Layar
 
 | Android | Desktop |
 |---------|---------|
-| ![Android](screenshots/android.png) | <img width="591" height="445" alt="SS Desktop" src="https://github.com/user-attachments/assets/6e11b34f-4933-4dca-9648-62861ac80460" />|
+| ![SSAndroid.png](SSAndroid.png) | <img width="1200" height="200" alt="SS Desktop" src="https://github.com/user-attachments/assets/6e11b34f-4933-4dca-9648-62861ac80460" />|
 
 ## Isi Aplikasi Saat Ini
 
 - Layar utama menampilkan judul "Pengingat Tugas Kuliah" dan "Tema 2".
-- Kalimat sapaan yang menyebut nama platform tempat aplikasi berjalan, misalnya "Pengingat Tugas Kuliah berjalan di Desktop JVM".
+- Kalimat sapaan yang menyebut nama platform tempat aplikasi berjalan.
 - Tombol **Tentang** untuk menampilkan atau menyembunyikan daftar nama dan NIM anggota kelompok.
+- Model data tugas, sumber data palsu, dan demo konsol (lihat bagian di bawah).
 
-## Teknologi
+## Model Data
 
-| Komponen                | Versi         |
-|-------------------------|---------------|
-| Kotlin                  | 2.4.20        |
-| Compose Multiplatform   | 1.12.1        |
-| Material 3              | 1.12.0-alpha03 |
-| Android Gradle Plugin   | 9.1.1         |
-| Gradle                  | 9.5.1         |
-| Android minSdk          | 24            |
-| Android compileSdk / targetSdk | 37     |
+Semua model ada di `shared/src/commonMain/kotlin/id/ac/itera/pengingattugas/model/`.
 
-Daftar versi library ada di `gradle/libs.versions.toml`.
+| Berkas           | Jenis         | Keterangan                                                          |
+|------------------|---------------|---------------------------------------------------------------------|
+| `Tugas.kt`       | data class    | Entitas utama: `id`, `judul`, `mataKuliah`, `tenggat`, `catatan`, `status` |
+| `Matakuliah.kt`  | data class    | Entitas pendukung `MataKuliah`: `kode`, `nama`                      |
+| `StatusTugas.kt` | sealed class  | Tiga nilai: `Belum`, `Dikerjakan(progres)`, `Selesai(waktuSelesai)` |
+| `TugasExt.kt`    | fungsi ekstensi | `label()` yang mengubah status menjadi teks yang mudah dibaca     |
+
+Satu-satunya kolom yang boleh kosong adalah `catatan` (`String?`). Kolom lain tidak nullable.
+
+```kotlin
+data class Tugas(
+    val id: Int,
+    val judul: String,
+    val mataKuliah: MataKuliah,
+    val tenggat: String,
+    val catatan: String?,
+    val status: StatusTugas = StatusTugas.Belum
+)
+
+sealed class StatusTugas {
+    data object Belum : StatusTugas()
+    data class Dikerjakan(val progres: Int) : StatusTugas()
+    data class Selesai(val waktuSelesai: String) : StatusTugas()
+}
+```
+
+## Sumber Data Palsu
+
+Antarmuka `Sumber` dan implementasi `SumberTugasPalsu` ada di `commonMain/.../data/`. Belum ada database atau jaringan, datanya dibuat di dalam kode.
+
+| Fungsi          | Perilaku                                                                                       |
+|-----------------|------------------------------------------------------------------------------------------------|
+| `ambil(id)`     | `suspend`, menunggu `delay(1000)` lalu mengembalikan satu `Tugas`                              |
+| `pantau(id)`    | mengembalikan `Flow<Tugas>` yang memancarkan `Belum`, lalu `Dikerjakan(40)` setelah 1,5 detik, lalu `Selesai` setelah 2 detik |
+
+## Demo Konsol
+
+Berkas: `shared/src/jvmMain/kotlin/id/ac/itera/pengingattugas/DemoKonsol.kt`
+
+Cara menjalankan: buka berkas itu di Android Studio, klik ikon hijau di samping `fun main()`, lalu pilih **Run**.
+
+Contoh keluaran (angka milidetik bisa sedikit berbeda di setiap komputer):
+
+```text
+=== Demo Pengingat Tugas Kuliah ===
+[+0 ms] Mengambil tugas dengan id 7 ...
+[+1025 ms] Tugas diterima
+    Judul       : Laporan Praktikum Minggu-4
+    Mata kuliah : IF25-21008 - Jaringan Komputer
+    Tenggat     : 2026-10-26 23:59
+    Catatan     : -
+
+[+1031 ms] Memantau perubahan status ...
+[+1040 ms] Status: Belum dikerjakan
+[+2552 ms] Status: Sedang dikerjakan (40%)
+[+4564 ms] Status: Selesai: 2026-10-25 20:30
+[+4564 ms] Selesai.
+```
+
+Hasil Tangkapan Layar:  
+![SSDemoKonsol.png](SSDemoKonsol.png)
 
 ## Prasyarat
 
@@ -73,9 +127,11 @@ PengingatTugasKuliah/
   shared/
     src/
       commonMain/kotlin/       Kode untuk semua platform
+        id/ac/itera/pengingattugas/model/   Model data
+        id/ac/itera/pengingattugas/data/    Sumber data palsu
       androidMain/kotlin/      Kode khusus Android
-      jvmMain/kotlin/          Kode khusus Desktop (JVM)
-      commonTest/              Test untuk semua platform
+      jvmMain/kotlin/          Kode khusus Desktop (JVM), termasuk DemoKonsol
+      commonTest/              Test untuk semua platform (SumberTugasPalsuTest)
       androidHostTest/         Test Android
       jvmTest/                 Test Desktop
   gradle/libs.versions.toml    Daftar versi library
@@ -85,33 +141,10 @@ PengingatTugasKuliah/
 
 | Folder       | Isinya                                                        |
 |--------------|---------------------------------------------------------------|
-| `commonMain` | Kode untuk semua platform (`App.kt`, `Platform.kt`, `Tentang.kt`) |
+| `commonMain` | Kode untuk semua platform (`App.kt`, `Platform.kt`, `Tentang.kt`, `model/`, `data/`) |
 | `androidMain`| Kode khusus Android                                           |
-| `jvmMain`    | Kode khusus Desktop (JVM)                                     |
+| `jvmMain`    | Kode khusus Desktop (JVM), termasuk `DemoKonsol.kt`           |
 
-## Kode Bersama dan Kode Khusus (expect dan actual)
-
-Di `commonMain` kita hanya berjanji ada fungsi `namaPlatform()` lewat `expect`. Setiap platform menepati janji itu dengan `actual` miliknya sendiri.
-
-`commonMain/Platform.kt`
-
-```kotlin
-expect fun namaPlatform(): String
-
-fun sapaan(): String = "Pengingat Tugas Kuliah berjalan di ${namaPlatform()}"
-```
-
-`androidMain/Platform.android.kt`
-
-```kotlin
-actual fun namaPlatform(): String = "Android ${Build.VERSION.SDK_INT}"
-```
-
-`jvmMain/Platform.jvm.kt`
-
-```kotlin
-actual fun namaPlatform(): String = "Desktop JVM"
-```
 
 ## Cara Menjalankan
 
@@ -143,20 +176,6 @@ actual fun namaPlatform(): String = "Desktop JVM"
 
 # Desktop
 ./gradlew :shared:jvmTest
-
 ```
 
-## Kalau Gradle Rewel
-
-| Pesan error              | Penyebab                              | Yang dicoba                         |
-|--------------------------|---------------------------------------|-------------------------------------|
-| Gradle sync failed       | JDK atau SDK tidak ditemukan          | Periksa `JAVA_HOME` dan `ANDROID_HOME` |
-| SDK location not found   | Berkas `local.properties` belum ada   | Buat berkas itu berisi `sdk.dir`    |
-| Kotlin version mismatch  | Versi Kotlin dan Compose tidak cocok  | Samakan versi di `libs.versions.toml` |
-
-## Referensi
-
-- [Kotlin Multiplatform Wizard](https://kmp.jetbrains.com)
-- [Expected and actual declarations, kotlinlang.org](https://kotlinlang.org/docs/multiplatform-expect-actual.html)
-- [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)
-- Materi: Pertemuan 1, Kenalan dengan KMP dan Siapkan Alat
+`SumberTugasPalsuTest` memeriksa hasil `ambil`, pengambilan dua tugas bersamaan, urutan status pada `pantau`, dan teks `label()`. Test memakai waktu virtual dari `kotlinx-coroutines-test`, jadi tidak benar-benar menunggu.

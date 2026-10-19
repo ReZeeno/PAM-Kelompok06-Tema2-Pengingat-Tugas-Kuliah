@@ -28,6 +28,6 @@ class SumberTugasPalsu : Sumber<Tugas> {
         delay(1500)
         emit(awal.copy(status = StatusTugas.Dikerjakan(progres = 40)))
         delay(2000)
-        emit(awal.copy(status = StatusTugas.Selesai(waktuSelesai = "2026-10-19 12:30")))
+        emit(awal.copy(status = StatusTugas.Selesai(waktuSelesai = "2026-10-25 20:30")))
     }
 }
