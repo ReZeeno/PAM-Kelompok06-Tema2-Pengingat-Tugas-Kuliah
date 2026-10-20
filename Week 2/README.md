@@ -21,6 +21,13 @@ Ketua kelompok: Yoga Aditomo
 | 2  | Guntur Anggoro Rahardianto   | 124140105 |
 | 3  | Muhammad Radhitya Hammam     | 124140189 |
 
+## Pembagian Kerja (Minggu 2)
+
+| Bagian                                                     | Dikerjakan oleh |
+|------------------------------------------------------------|-----------------|
+|Inisialisasi proyek awal dari Week 1 dan Perbaikan Konfigurasi Gradle (libs.versions.toml & dependency build)   | Muhammad Radhitya Hammam|
+| Model data (`Tugas`, `MataKuliah`, `StatusTugas`) dan Sumber data palsu (`Sumber`, `SumberTugasPalsu`)          | Yoga Aditomo |
+| Perbaikan Sumber Data (Sumber.kt, SumberTugasPalsu.kt), Pengujian (DemoKonsol.kt & SumberTugasPalsuTest.kt), perbaikan dependensi test, dan README                             | Guntur Anggoro Rahardianto |
 
 ## Tangkapan Layar
 
