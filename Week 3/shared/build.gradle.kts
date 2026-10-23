@@ -62,6 +62,9 @@ kotlin {
             implementation(libs.kotlinx.coroutines.test)
         }
     }
+    sourceSets.commonMain.dependencies {
+        implementation(kotlin("test"))
+    }
 }
 
 dependencies {
