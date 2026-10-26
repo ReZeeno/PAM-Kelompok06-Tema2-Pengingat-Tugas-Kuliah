@@ -12,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,25 +22,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import id.ac.itera.pengingattugas.data.contohDaftarTugas
+import id.ac.itera.pengingattugas.data.SumberDaftarTugas
+import id.ac.itera.pengingattugas.data.sumberTugasBersama
 import id.ac.itera.pengingattugas.model.belumSelesai
 import id.ac.itera.pengingattugas.model.urutkanTenggat
 
 @Composable
-fun LayarDaftar() {
-    val semua = remember { contohDaftarTugas() }
+fun LayarDaftar(
+    onTambah: () -> Unit,
+    sumber: SumberDaftarTugas = sumberTugasBersama
+) {
+    val semua by sumber.daftar.collectAsState()
     var sembunyikanSelesai by remember { mutableStateOf(false) }
 
     // Olah sebelum tampil: urutkan berdasarkan tenggat, lalu (opsional) saring yang belum selesai
-    val tampil = remember(sembunyikanSelesai) {
+    val tampil = remember(semua, sembunyikanSelesai) {
         val urut = semua.urutkanTenggat()
         if (sembunyikanSelesai) urut.belumSelesai() else urut
     }
 
     Scaffold(
         floatingActionButton = {
-            // Belum berfungsi, sesuai ketentuan checkpoint minggu 3
-            FloatingActionButton(onClick = { }) {
+            FloatingActionButton(onClick = onTambah) {
                 Text("+", fontSize = 24.sp)
             }
         }
