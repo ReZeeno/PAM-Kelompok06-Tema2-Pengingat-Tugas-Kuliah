@@ -17,41 +17,40 @@ Ketua kelompok: Yoga Aditomo
 | 2  | Guntur Anggoro Rahardianto | 124140105 |
 | 3  | Muhammad Radhitya Hammam   | 124140189 |
 
-## Pembagian Kerja (Minggu 3)
+## Pembagian Kerja (Minggu 4)
 
 | Bagian | Dikerjakan oleh |
 |--------|--------------|
-| Folder Week 3, `DaftarTugas`, `LayarDaftar` (LazyColumn, FAB, switch filter), pembaruan `App.kt`, tangkapan layar | Muhammad Radhitya Hammam |
-| `DataDummyTugas` (10 data), `TugasOlah` (urut dan filter), `TugasOlahTest` | Guntur Anggoro Rahardianto |
-| `LabelStatus`, `KartuTugas`, README | Yoga Aditomo |
+| `SumberDaftarTugas`, `SumberDaftarTugasPalsu` (MutableStateFlow), `PilihanMataKuliah`, `SumberDaftarTugasPalsuTest` | Guntur Anggoro Rahardianto |
+| Folder Week 4, `FormTugasUiState`, `FormTugasViewModel`, `FormTugasViewModelTest`, README | Yoga Aditomo |
+| `KolomTeks`, `FormTugasScreen`, pembaruan `LayarDaftar` dan `App.kt`, tangkapan layar | Muhammad Radhitya Hammam |
 
 ## Tangkapan Layar
 
-| Android | Desktop |
+| Form tugas baru | Daftar setelah tugas ditambah |
 |--|--|
-| ![ssandroid.png](ssandroid.png) | ![ssdekstop.png](ssdekstop.png) |
+| ![SSandro1.png](SSandro1.png) | ![SSandro2.png](SSandro2.png) |
+|![SSdekstop1.png](SSdekstop1.png)  | ![SSdekstop2.png](SSdekstop2.png) |
 
 ## Isi Aplikasi Saat Ini
 
-- Layar daftar tugas memakai `LazyColumn` dengan 10 data dummy dari `Tugas` minggu lalu.
-- Setiap tugas tampil sebagai `KartuTugas` berisi judul, mata kuliah, tenggat, catatan, dan `LabelStatus` dari sealed class `StatusTugas`.
-- Daftar diurutkan berdasarkan tenggat terdekat (`sortedBy`). Switch "Sembunyikan yang selesai" menyaring tugas dengan `filter`.
-- Tombol `+` (FloatingActionButton) di pojok kanan bawah, belum berfungsi.
+- Layar daftar tugas dari minggu 3 tetap ada: `LazyColumn`, kartu tugas dengan `LabelStatus`, urut berdasarkan tenggat terdekat, dan switch "Sembunyikan yang selesai".
+- Tombol `+` (FloatingActionButton) sekarang membuka form **Tugas baru**.
+- Form berisi kolom judul (maksimal 60 karakter), pilihan mata kuliah, tenggat dengan format `yyyy-MM-dd HH:mm`, dan catatan opsional.
+- Tombol Simpan hanya aktif kalau judul, mata kuliah, dan tenggat sudah terisi benar. Tombol ditekan dua kali tetap menambah satu tugas.
+- Setelah disimpan, form tertutup dan tugas baru langsung tampil di layar daftar sesuai urutan tenggatnya.
+- Isi form tidak hilang saat layar diputar karena state disimpan di `ViewModel`.
+- Data masih disimpan di memori (sumber palsu), jadi hilang saat aplikasi ditutup. Penyimpanan sungguhan dikerjakan di minggu 6.
 
-## Komponen UI
+## Arsitektur (MVVM)
 
-Semua ada di `shared/src/commonMain/kotlin/id/ac/itera/pengingattugas/ui/`.
+| Lapisan | Berkas | Tugasnya |
+|---------|--------|----------|
+| View | `FormTugasScreen`, `KolomTeks`, `LayarDaftar` | Menampilkan state dan meneruskan aksi pengguna, tanpa aturan bisnis |
+| ViewModel | `FormTugasViewModel`, `FormTugasUiState` | Menyimpan state form, memvalidasi, dan memanggil sumber data |
+| Model | `Tugas`, `SumberDaftarTugas`, `SumberDaftarTugasPalsu` | Data class dan sumber data palsu berbasis `MutableStateFlow` |
 
-| Berkas            | Keterangan                                                          |
-|-------------------|---------------------------------------------------------------------|
-| `LabelStatus.kt`  | Label berbentuk pil, warnanya mengikuti `StatusTugas`                |
-| `KartuTugas.kt`   | Kartu satu tugas, punya parameter `ringkas` dan `onKlik`             |
-| `DaftarTugas.kt`  | `LazyColumn` dengan `key = { it.id }`                                |
-| `LayarDaftar.kt`  | Scaffold, judul, switch filter, daftar, dan FAB                      |
-
-## Pengolahan Data
-
-`model/TugasOlah.kt` berisi `urutkanTenggat()` dan `belumSelesai()`. Datanya ada di `data/DataDummyTugas.kt`. Kedua fungsi diuji di `TugasOlahTest`.
+Kebiasaan yang dipakai: `bisaSimpan` dihitung dari nilai lain dan tidak disimpan sendiri, `MutableStateFlow` bersifat private dan hanya `StateFlow` yang publik, state diubah dengan `update { it.copy(...) }`, dan `KolomTeks` tidak menyimpan state sendiri (state turun, event naik).
 
 ## Cara Menjalankan
 
@@ -66,9 +65,8 @@ Semua ada di `shared/src/commonMain/kotlin/id/ac/itera/pengingattugas/ui/`.
 ```
 ./gradlew :desktopApp:run
 ```
-
 ## Menjalankan Test
 
 ```
-./gradlew :shared:jvmTest
+./gradlew :shared:allTests
 ```
